@@ -38,20 +38,50 @@ function Category() {
         const querySnap = await getDocs(q);
 
         // log the documents
-        let listings = [];
+        const listings = [];
 
         querySnap.forEach((doc) => {
-          console.log(doc);
+          return listings.push({
+            id: doc.id,
+            data: doc.data,
+          });
         });
+        setListings(listings);
+        setLoading(false);
       } catch (error) {
-        console.log(error);
+        toast.error('could not fetch listings');
       }
     };
 
     fetchListings();
   }, [params.categoryName]);
 
-  return <div>Category</div>;
+  return (
+    <div className="category">
+      <header>
+        <p className="pageHeader">
+          {params.categoryName === 'rent'
+            ? 'Places for rent'
+            : 'Places for sale'}
+        </p>
+      </header>
+      {loading ? (
+        <Spinner />
+      ) : listings && listings.length > 0 ? (
+        <>
+          <main>
+            <ul className="categoryListings">
+              {listings.map((listing) => (
+                <h3 key={listing.id}>{listing.data.name}</h3>
+              ))}
+            </ul>
+          </main>
+        </>
+      ) : (
+        <p>No listings for {params.categoryName}</p>
+      )}
+    </div>
+  );
 }
 
 export default Category;
