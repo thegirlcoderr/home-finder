@@ -7,11 +7,9 @@ import {
   where,
   orderBy,
   limit,
-  startAfter,
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { toast } from 'react-toastify';
-import ListingItem from '../components/ListingItem';
 import Spinner from '../components/Spinner';
 
 function Category() {
@@ -23,33 +21,31 @@ function Category() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        //To get reference
+        // Get reference
         const listingsRef = collection(db, 'listings');
-
-        //To create a query
+        // Create a query
         const q = query(
           listingsRef,
-          where('type', '==', 'rent'),
-          orderBy('timeStamp', 'desc'),
+          where('type', '==', params.categoryName),
+          orderBy('timestamp', 'desc'),
           limit(10)
         );
 
-        //To execute query
+        // Execute query
         const querySnap = await getDocs(q);
-
-        // log the documents
         const listings = [];
 
         querySnap.forEach((doc) => {
           return listings.push({
             id: doc.id,
-            data: doc.data,
+            data: doc.data(),
           });
         });
+
         setListings(listings);
         setLoading(false);
       } catch (error) {
-        toast.error('could not fetch listings');
+        toast.error('Could not fetch listings');
       }
     };
 
@@ -65,6 +61,7 @@ function Category() {
             : 'Places for sale'}
         </p>
       </header>
+
       {loading ? (
         <Spinner />
       ) : listings && listings.length > 0 ? (
