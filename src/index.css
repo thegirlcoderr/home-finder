@@ -306,18 +306,6 @@ button {
     margin-bottom: 10rem;
   }
 }
-@media (max-width: 767px) {
-  .signInBar,
-  .signUpBar {
-    justify-content: center;
-    margin-top: 2rem;
-  }
-
-  .signInButton,
-  .signUpButton {
-    margin-left: 0;
-  }
-}
 
 .exploreHeading,
 .exploreCategoryHeading {
